@@ -32,6 +32,8 @@ func main() {
 		if !healthCheckStatus {
 			fmt.Printf("Healtcheck failed on try %v- retrying\n", try)
 			continue
+		} else {
+			break
 		}
 	}
 
