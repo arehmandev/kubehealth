@@ -14,7 +14,8 @@ This is a a quick tool for running kubernetes healthchecks against all pods in a
 ## To run: 
 ```
 1. Ensure your kubeconfig is set to the right context (pointing to correct cluster)
-2. ./kubehealth *namespace*
+2. Usage: kubehealth namespace 'labelkey:labelvalue'
+Info: Label args can be left blank. Accept a comma seperatedlist of 'key=value,key2=value'
 ```
 
 Note - this runs faster than simply doing a kubectl get pods -o json and parsing through with jq.

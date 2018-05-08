@@ -10,9 +10,10 @@ import (
 	"k8s.io/client-go/kubernetes"
 )
 
-func getPodList(namespace string, clientSet *kubernetes.Clientset) (podList *v1.PodList) {
+func getPodList(namespace, labels string, clientSet *kubernetes.Clientset) (podList *v1.PodList) {
 
-	opts := metav1.ListOptions{}
+	opts := metav1.ListOptions{LabelSelector: labels}
+
 	podList, err := clientSet.CoreV1().Pods(namespace).List(opts)
 
 	if err != nil {
@@ -27,14 +28,22 @@ func getPodList(namespace string, clientSet *kubernetes.Clientset) (podList *v1.
 }
 
 // Note to self: Comment later please Abdul - use cobra instead
-func checkParams() string {
-	if len(os.Args) < 2 || len(os.Args) > 2 {
-		fmt.Printf("Usage: %v namespace\n", os.Args[0])
+func checkParams() (namespace, labels string) {
+	if len(os.Args) < 2 || len(os.Args) > 3 {
+		fmt.Printf("Usage: %v namespace 'labelkey:labelvalue'\n", os.Args[0])
+		fmt.Println("Label args can be left blank. Accept a comma seperatedlist of 'key=value,key2=value'")
 		os.Exit(1)
 	} else {
 		fmt.Println("Performing pods for namespace:", os.Args[1])
 	}
 
-	namespace := os.Args[1]
-	return namespace
+	namespace = os.Args[1]
+
+	if len(os.Args) < 3 {
+		labels = ""
+	} else {
+		labels = os.Args[2]
+	}
+
+	return namespace, labels
 }

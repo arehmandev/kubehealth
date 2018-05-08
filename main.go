@@ -15,12 +15,12 @@ var (
 
 func main() {
 
-	namespace := checkParams()
+	namespace, labels := checkParams()
 	clientset := configureClient()
 
 	fmt.Println(healthCheckBanner)
 
-	podList := getPodList(namespace, clientset)
+	podList := getPodList(namespace, labels, clientset)
 
 	// Retry loop
 	for index := 0; index < healthCheckRetries; index++ {
