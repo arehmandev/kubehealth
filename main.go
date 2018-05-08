@@ -9,7 +9,7 @@ var (
 	healthCheckStatus  bool
 	healthCheckRetries = 5
 	healthCheckBanner  = `
-================================================
+==============================================================
 	PERFORMING HEALTHCHECK`
 )
 

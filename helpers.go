@@ -21,8 +21,8 @@ func getPodList(namespace, labels string, clientSet *kubernetes.Clientset) (podL
 		log.Fatal(err)
 	}
 
-	fmt.Printf("[NAMESPACE]: %s, [POD COUNT]: %v\n", namespace, len(podList.Items))
-	fmt.Println("================================================")
+	fmt.Printf("[NAMESPACE]: %s, [POD COUNT]: %v, [LABELS]: %v\n", namespace, len(podList.Items), labels)
+	fmt.Println("==============================================================")
 
 	return podList
 }
