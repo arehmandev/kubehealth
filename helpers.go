@@ -29,7 +29,7 @@ func getPodList(namespace string, clientSet *kubernetes.Clientset) (podList *v1.
 // Note to self: Comment later please Abdul - use cobra instead
 func checkParams() string {
 	if len(os.Args) < 2 || len(os.Args) > 2 {
-		fmt.Printf("Usage: %v namespace", os.Args[0])
+		fmt.Printf("Usage: %v namespace\n", os.Args[0])
 		os.Exit(1)
 	} else {
 		fmt.Println("Performing pods for namespace:", os.Args[1])
