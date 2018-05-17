@@ -20,11 +20,11 @@ func main() {
 
 	fmt.Println(healthCheckBanner)
 
-	podList := getPodList(namespace, labels, clientset)
-
 	// Retry loop
 	for index := 0; index < healthCheckRetries; index++ {
 		try := index + 1
+
+		podList := getPodList(namespace, labels, clientset)
 
 		// Check health of pods for all cases
 		fmt.Printf("Healthcheck try %v of %v\n", try, healthCheckRetries)
