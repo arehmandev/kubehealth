@@ -3,11 +3,13 @@ package main
 import (
 	"fmt"
 	"log"
+	"time"
 )
 
 var (
 	healthCheckStatus  bool
 	healthCheckRetries = 5
+	healthCheckSleep   = 10
 	healthCheckBanner  = `
 ==============================================================
 	PERFORMING HEALTHCHECK`
@@ -17,6 +19,7 @@ func main() {
 
 	namespace, labels := checkParams()
 	clientset := configureClient()
+	sleepDuration := time.Duration(int64(healthCheckSleep)) * time.Second
 
 	fmt.Println(healthCheckBanner)
 
@@ -30,7 +33,8 @@ func main() {
 		fmt.Printf("Healthcheck try %v of %v\n", try, healthCheckRetries)
 		healthCheckStatus = runPodHealthcheck(podList)
 		if !healthCheckStatus {
-			fmt.Printf("Healtcheck failed on try %v- retrying\n", try)
+			fmt.Printf("Healthcheck failed on try %v- retrying after sleep (%v seconds)\n", try, healthCheckSleep)
+			time.Sleep(sleepDuration)
 			continue
 		} else {
 			break
