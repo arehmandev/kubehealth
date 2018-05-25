@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 
 	"k8s.io/api/core/v1"
 )
@@ -16,7 +17,7 @@ func runPodHealthcheck(podList *v1.PodList) (healthCheckStatus bool) {
 		if pod.Status.Phase != "Running" {
 			if pod.Status.Phase != "Succeeded" {
 				healthCheckStatus = false
-				fmt.Printf("Reason: [ERROR] POD IS STILL SCHEDULING - NAME:%v INFO: %v\n", pod.Name, pod.Status.Phase)
+				fmt.Printf("Reason: [ERROR] POD IS NOT IN RUNNING or SUCCEEDED PHASE - NAME:%v INFO: PHASE: %v\n", pod.Name, pod.Status.Phase)
 			}
 		}
 
@@ -42,6 +43,8 @@ func runPodHealthcheck(podList *v1.PodList) (healthCheckStatus bool) {
 				if containerStatus.State.Terminated != nil {
 					if containerStatus.State.Terminated.ExitCode != 0 {
 						fmt.Printf("[ERROR] Pod: %s Container: %s | Reason: [TERMINATED BADLY] | Status: %s | Exit code: %v\n", pod.Name, containerName, containerStatus.State.Terminated.Reason, containerStatus.State.Terminated.ExitCode)
+						fmt.Println("[TERMINATING] Terminating healthcheck due to failed onetime pod")
+						os.Exit(1)
 						healthCheckStatus = false
 					}
 				}
