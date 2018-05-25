@@ -13,6 +13,13 @@ func runPodHealthcheck(podList *v1.PodList) (healthCheckStatus bool) {
 
 	for _, pod := range podList.Items {
 
+		if pod.Status.Phase != "Running" {
+			if pod.Status.Phase != "Succeeded" {
+				healthCheckStatus = false
+				fmt.Printf("Reason: [ERROR] POD IS STILL SCHEDULING - NAME:%v INFO: %v\n", pod.Name, pod.Status.Phase)
+			}
+		}
+
 		// totalContainers := len(pod.Spec.Containers)
 		for _, containerStatus := range pod.Status.ContainerStatuses {
 			if !containerStatus.Ready {
